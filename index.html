@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Nadu Election 2026 Sentiment Analysis</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #333;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 15px 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            max-width: 1500px;
+            width: 95%;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .section {
+            max-width: 1500px;
+            width: 95%;
+            margin: auto;
+            margin-top: 40px;
+        }
+
+        .section h2 {
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: .3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .header {
+            /* background: linear-gradient(135deg, #2563eb, #7c3aed); */
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .controls label {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .controls select {
+            padding: 8px 12px;
+            font-size: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .charts-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .chart-box {
+            flex: 1;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 16px;
+        }
+
+        .chart-box h3 {
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: #555;
+            text-align: center;
+        }
+
+        .date-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .daily-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+
+        .party-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .party-name {
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .fill {
+            height: 8px;
+            border-radius: 10px;
+        }
+
+        .green {
+            background: #2ecc71;
+        }
+
+        .gray {
+            background: #95a5a6;
+        }
+
+        .red {
+            background: #e74c3c;
+        }
+
+        .pos-text {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        .neu-text {
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .neg-text {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        footer {
+            margin-top: 80px;
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+        }
+
+        @media (max-width:1200px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .daily-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+        @media (max-width:900px) {
+
+            .charts-row {
+                flex-direction: column;
+            }
+
+        }
+
+        @media (max-width:700px) {
+
+            nav .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav a {
+                margin: 0 10px;
+            }
+
+            .section h2 {
+                font-size: 26px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .daily-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width:480px) {
+
+            .daily-row {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="container">
+
+            <h3>TN Election</h3>
+
+            <div>
+                <a href="#about">About</a>
+                <a href="#method">Methodology</a>
+                <a href="#dashboard">Dashboard</a>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <div class="header">
+
+        <h1>Tamil Nadu Political Parties Sentiment Analysis – Election 2026</h1>
+
+        <p>YouTube Comment Sentiment Analysis using AI (Gemma-3-4B-IT)</p>
+
+    </div>
+
+    <section class="section" id="about">
+
+        <h2>About This Project</h2>
+
+        <div class="card">
+
+
+            <p>
+                This project analyzes public sentiment toward major Tamil Nadu political parties using publicly
+                available <b>1,15,000+ YouTube comments</b>.
+                The dataset covers political discussions between <b>02 March 2026 – 13 March 2026</b>.
+            </p>
+
+            <br>
+
+            <p>
+                Using Google's open-source LLM <b>Gemma-3-4B-IT</b>, each comment is analyzed using targeted sentiment
+                analysis, where the sentiment is determined based on the opinion expressed toward a specific political
+                party mentioned in the context.
+            </p>
+
+            <br>
+
+            <p>The sentiment is classified into three categories:</p>
+
+            <ul style="margin-left: 40px;">
+                <li>Positive</li>
+                <li>Negative</li>
+                <li>Neutral</li>
+            </ul>
+
+            <br>
+
+            <p>
+                The results are aggregated and visualized to understand how public discussions evolve across political
+                parties.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="method">
+
+        <h2>Methodology</h2>
+
+        <div class="grid">
+
+            <div class="card">
+
+                <h3>Data Collection</h3>
+
+                <p>
+
+                    YouTube comments were collected from Tamil news
+                    channels discussing Tamil Nadu politics.
+
+                    The YouTube Data API was used to retrieve comments.
+
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>AI Sentiment Analysis</h3>
+
+                <p>
+
+                    Each comment was analyzed using Google's
+                    LLM model <b>Gemma-3-4B-IT</b>.
+
+                    The model classifies comments into
+                    positive, negative, or neutral sentiment.
+
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Data Processing</h3>
+
+                <p>
+
+                    Comments were filtered using party entity names
+                    and aggregated by date.
+
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Visualization</h3>
+
+                <p>
+
+                    Interactive charts were built using
+                    the ApexCharts JavaScript library.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="dashboard">
+
+        <h2>Sentiment Dashboard</h2>
+
+        <div class="card">
+
+            <h3>Sentiment Trend</h3>
+
+            <div id="trendChart" style="height:650px"></div>
+
+            <p style="text-align:center;margin-top:15px">
+                Sentiment Scale: -1.0 (Very Negative) to +1.0 (Very Positive)
+            </p>
+
+        </div>
+
+        <div class="card" style="margin-top: 30px;">
+
+            <h3>Sentiment Distribution</h3>
+
+            <div class="controls">
+
+                <label>Select Date</label>
+                <select id="dateSelect"></select>
+
+                <label>Select Party</label>
+                <select id="partySelect"></select>
+
+            </div>
+
+            <div class="charts-row">
+
+                <div class="chart-box">
+                    <h3>Sentiment Breakdown (Bar)</h3>
+                    <div id="barChart"></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>Sentiment Breakdown (Donut)</h3>
+                    <div id="donutChart"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card" style="margin-top: 30px;">
+
+            <h3>Daily Party Comparison</h3>
+
+            <div id="dailyComparison"></div>
+        </div>
+
+
+
+    </section>
+
+
+
+    <section class="section">
+
+        <h2>Disclaimer</h2>
+
+        <div class="card">
+
+            <p>
+
+                This project analyzes publicly available YouTube comments related to
+                Tamil Nadu Election 2026. The analysis is automated using AI model.
+                The results are for research purposes only.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <footer>
+        © 2026 Sathishkumar K • Tamil Nadu Election Sentiment Analysis Project
+    </footer>
+
+
+    <script>
+
+
+        fetch("party_sentiment.json")
+            .then(response => response.json())
+            .then(json => {
+                const data = json[0].data;
+                createTrendChart(data);
+                createDistributionCharts(data);
+                createDailyComparison(data);
+            });
+
+        function createTrendChart(data) {
+            function formatDate(dateStr) {
+
+                const d = new Date(dateStr);
+
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = d.toLocaleString('en-GB', { month: 'short' });
+
+                return day + " " + month;
+
+            }
+
+            data.forEach(row => {
+                const pos = parseFloat(row.pos_percentage);
+                const neg = parseFloat(row.neg_percentage);
+                if (pos >= neg)
+                    row.sentiment_score = pos;
+                else
+                    row.sentiment_score = -neg;
+
+            });
+
+
+            const rawDates = [...new Set(data.map(d => d.date))];
+            const labels = rawDates.map(formatDate);
+
+            const grouped = {};
+
+            data.forEach(row => {
+                if (!grouped[row.party_name])
+                    grouped[row.party_name] = [];
+
+            });
+
+
+            Object.keys(grouped).forEach(party => {
+                grouped[party] = labels.map(date => {
+                    const row = data.find(d =>
+                        formatDate(d.date) === date &&
+                        d.party_name === party
+                    );
+                    return row ? row.sentiment_score : null;
+                });
+            });
+
+            const series = Object.keys(grouped).map(party => ({
+                name: party,
+                data: grouped[party]
+            }));
+
+
+            var options = {
+
+                chart: {
+                    type: 'line',
+                    height: 650
+                },
+
+                series: series,
+
+                colors: [
+                    "#1f77b4",
+                    "#ff7f0e",
+                    "#2ca02c",
+                    "#d62728",
+                    "#9467bd",
+                    "#8c564b"
+                ],
+
+                xaxis: {
+                    categories: labels,
+                    title: { text: "Date" }
+                },
+
+                yaxis: {
+                    title: { text: "Sentiment Score" },
+                    min: -1,
+                    max: 1,
+                    tickAmount: 4,
+
+                    labels: {
+                        formatter: function (val) {
+                            if (val > 0) return "+ " + val.toFixed(1);
+                            if (val < 0) return "- " + Math.abs(val).toFixed(1);
+                            return val.toFixed(1);
+                        }
+                    }
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            if (val === null) return "N/A";
+                            if (val > 0) return "+ " + val.toFixed(2);
+                            if (val < 0) return "- " + Math.abs(val).toFixed(2);
+                            return val.toFixed(2);
+                        }
+                    }
+                },
+
+                stroke: {
+                    curve: 'smooth',
+                    width: 4
+                },
+
+                grid: {
+                    borderColor: '#e0e0e0'
+                },
+
+                markers: {
+                    size: 5,
+                    shape: "circle",
+                    strokeWidth: 2,
+                    hover: { size: 7 }
+                },
+
+                legend: {
+                    show: true,
+                    position: 'bottom'
+                }
+
+            };
+
+
+            var chart = new ApexCharts(
+                document.querySelector("#trendChart"),
+                options
+            );
+
+            chart.render();
+        }
+
+        function createDistributionCharts(data) {
+            data.forEach(row => {
+
+                row.pos_percentage = parseFloat(row.pos_percentage);
+                row.neg_percentage = parseFloat(row.neg_percentage);
+                row.neu_percentage = parseFloat(row.neu_percentage);
+
+            });
+
+            const dateSelect = document.getElementById("dateSelect");
+            const partySelect = document.getElementById("partySelect");
+
+            const dates = [...new Set(data.map(d => d.date))];
+            const parties = [...new Set(data.map(d => d.party_name))];
+
+            dates.forEach(date => {
+                let option = document.createElement("option");
+                option.value = date;
+                option.text = date;
+                dateSelect.appendChild(option);
+
+            });
+
+            parties.forEach(party => {
+                let option = document.createElement("option");
+                option.value = party;
+                option.text = party;
+                partySelect.appendChild(option);
+
+            });
+
+            var barOptions = {
+
+                chart: { type: "bar", height: 380 },
+
+                series: [{ name: "Sentiment %", data: [] }],
+
+                xaxis: {
+                    categories: ["Positive", "Negative", "Neutral"],
+                    labels: {
+                        style: {
+                            fontSize: "15px",
+                            fontWeight: 600
+                        }
+                    }
+                },
+
+                colors: ["#2ecc71", "#e74c3c", "#95a5a6"],
+
+                plotOptions: {
+                    bar: {
+                        distributed: true,
+                        borderRadius: 3
+                    }
+                },
+
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return (val * 100).toFixed(0) + "%";
+                    }
+                },
+
+                yaxis: {
+                    min: 0,
+                    max: 1,
+                    labels: {
+                        formatter: function (val) {
+                            return (val * 100).toFixed(0) + "%";
+                        }
+                    }
+                },
+
+                legend: { show: false }
+
+            };
+
+            var barChart = new ApexCharts(
+                document.querySelector("#barChart"),
+                barOptions
+            );
+
+            barChart.render();
+
+            var donutOptions = {
+
+                chart: { type: "donut", height: 380 },
+
+                series: [],
+
+                labels: ["Positive", "Negative", "Neutral"],
+
+                colors: ["#2ecc71", "#e74c3c", "#95a5a6"],
+
+                dataLabels: {
+                    enabled: true
+                },
+
+                legend: { position: "bottom" },
+
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: "60%",
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: "Sentiment",
+                                    formatter: function (w) {
+                                        const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                        return Math.round(total * 100) + "%";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            };
+
+            var donutChart = new ApexCharts(
+                document.querySelector("#donutChart"),
+                donutOptions
+            );
+
+            donutChart.render();
+
+
+            function updateCharts() {
+
+                const selectedDate = dateSelect.value;
+                const selectedParty = partySelect.value;
+
+                const row = data.find(d =>
+                    d.date === selectedDate &&
+                    d.party_name === selectedParty
+                );
+
+                if (!row) return;
+
+                const rawSum = row.pos_percentage + row.neg_percentage + row.neu_percentage;
+
+                const pos = row.pos_percentage / rawSum;
+                const neg = row.neg_percentage / rawSum;
+                const neu = row.neu_percentage / rawSum;
+
+                barChart.updateSeries([{ data: [pos, neg, neu] }]);
+                donutChart.updateSeries([pos, neg, neu]);
+
+            }
+
+            dateSelect.addEventListener("change", updateCharts);
+            partySelect.addEventListener("change", updateCharts);
+
+            updateCharts();
+        }
+
+        function createDailyComparison(data) {
+
+            const container = document.getElementById("dailyComparison");
+
+            let grouped = {};
+
+            data.forEach(r => {
+
+                if (!grouped[r.date]) grouped[r.date] = [];
+
+                grouped[r.date].push(r);
+
+            });
+
+            const order = ["DMK", "ADMK", "TVK", "NTK", "BJP", "CONGRESS"];
+
+            for (let d in grouped) {
+
+                grouped[d].sort((a, b) => {
+                    return order.indexOf(a.party_name) - order.indexOf(b.party_name);
+                });
+
+            }
+
+            for (let date in grouped) {
+
+                let d = new Date(date);
+
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+
+                let title = document.createElement("div");
+
+                title.className = "date-title";
+
+                title.innerHTML = "📅 " + day + "-" + month + "-" + year;
+
+                container.appendChild(title);
+
+
+                let row = document.createElement("div");
+
+                row.className = "daily-row";
+
+                grouped[date].forEach(r => {
+
+                    let pos = r.pos_percentage * 100;
+                    let neu = r.neu_percentage * 100;
+                    let neg = r.neg_percentage * 100;
+
+                    row.innerHTML += `
+                        <div class="party-card">
+
+                        <div class="party-name">${r.party_name}</div>
+
+                        <div class="label">
+                        <span>Positive</span>
+                        <span class="pos-text">${Math.round(pos)}%</span>
+                        </div>
+
+                        <div class="bar">
+                        <div class="fill green" style="width:${pos}%"></div>
+                        </div>
+
+                        <div class="label">
+                        <span>Neutral</span>
+                        <span class="neu-text">${Math.round(neu)}%</span>
+                        </div>
+
+                        <div class="bar">
+                        <div class="fill gray" style="width:${neu}%"></div>
+                        </div>
+
+                        <div class="label">
+                        <span>Negative</span>
+                        <span class="neg-text">${Math.round(neg)}%</span>
+                        </div>
+
+                        <div class="bar">
+                        <div class="fill red" style="width:${neg}%"></div>
+                        </div>
+
+                        </div>
+                        `;
+
+                });
+
+                container.appendChild(row);
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
